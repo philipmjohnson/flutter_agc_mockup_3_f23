@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+
 import '../../data_model/user_db.dart';
 
 /// Presents the page containing fields to enter a username and password, plus buttons.
@@ -29,7 +30,7 @@ class SigninView extends ConsumerWidget {
                 ),
                 Text(
                   "Agile Garden Club",
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ],
             ),
@@ -81,8 +82,9 @@ class SigninView extends ConsumerWidget {
                         Navigator.pushReplacementNamed(context, '/home');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("Unknown User, try one of: ${userDB.getAllEmails().join(', ')}"),
-                          duration: Duration(seconds: 10),
+                          content: Text(
+                              "Unknown User, try one of: ${userDB.getAllEmails().join(', ')}"),
+                          duration: const Duration(seconds: 10),
                         ));
                       }
                     } else {
