@@ -4,7 +4,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 
 import 'field_padding.dart';
 
-/// A text field to support defining new or revised garden names.
+/// A dropdown allowing the user to specify a chapter.
 class ChapterDropdownField extends StatelessWidget {
   const ChapterDropdownField(
       {super.key,
