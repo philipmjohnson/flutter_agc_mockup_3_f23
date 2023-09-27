@@ -7,6 +7,9 @@ import '../../components/help_button.dart';
 import '../../data_model/chapter_db.dart';
 import '../../data_model/garden_db.dart';
 import '../../data_model/user_db.dart';
+import 'form-fields/description_field.dart';
+import 'form-fields/garden_name_field.dart';
+import 'form-fields/utils.dart';
 import 'gardens_view.dart';
 
 /// Provides a page enabling the creation of a new Garden.
@@ -30,23 +33,6 @@ class AddGardenView extends ConsumerWidget {
     final String currentUserID = ref.watch(currentUserIDProvider);
     List<String> chapterNames = chapterDB.getChapterNames();
 
-    validateUserNamesString(String val) {
-      List<String> userNames = val.split(',').map((val) => val.trim()).toList();
-      if (!userDB.areUserNames(userNames)) {
-        return 'Non-existent user name(s)';
-      }
-      return null;
-    }
-
-    List<String> usernamesToIDs(String usernamesString) {
-      if (usernamesString.isEmpty) {
-        return [];
-      }
-      List<String> usernames =
-          usernamesString.split(',').map((editor) => editor.trim()).toList();
-      return usernames.map((username) => userDB.getUserID(username)).toList();
-    }
-
     return Scaffold(
         appBar: AppBar(
           title: const Text('Add Garden'),
@@ -55,36 +41,14 @@ class AddGardenView extends ConsumerWidget {
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           children: <Widget>[
-            const SizedBox(height: 40.0),
             Column(
               children: <Widget>[
                 FormBuilder(
                   key: _formKey,
                   child: Column(
                     children: [
-                      FormBuilderTextField(
-                        name: 'name',
-                        key: _nameFieldKey,
-                        decoration: const InputDecoration(
-                          labelText: 'Name',
-                          hintText: 'Example: "Rosebud Garden"',
-                        ),
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                        ]),
-                      ),
-                      const SizedBox(height: 10),
-                      FormBuilderTextField(
-                        name: 'description',
-                        key: _descriptionFieldKey,
-                        decoration: const InputDecoration(
-                          labelText: 'Description',
-                          hintText: 'Example: "19 Beds, 162 Plantings (2022)"',
-                        ),
-                        validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(),
-                        ]),
-                      ),
+                      GardenNameField(fieldKey: _nameFieldKey),
+                      DescriptionField(fieldKey: _descriptionFieldKey),
                       FormBuilderDropdown<String>(
                         // autovalidate: true,
                         name: 'chapter',
@@ -108,7 +72,8 @@ class AddGardenView extends ConsumerWidget {
                         key: _photoFieldKey,
                         decoration: const InputDecoration(
                           labelText: 'Photo',
-                          hintText: 'garden-004.jpg (or garden-005.jpg)',
+                          hintText:
+                              'Example: garden-004.jpg (or garden-005.jpg)',
                         ),
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(),
@@ -124,7 +89,7 @@ class AddGardenView extends ConsumerWidget {
                         ),
                         validator: (val) {
                           if (val is String) {
-                            return validateUserNamesString(val);
+                            return validateUserNamesString(userDB, val);
                           }
                           return null;
                         },
@@ -139,7 +104,7 @@ class AddGardenView extends ConsumerWidget {
                         ),
                         validator: (val) {
                           if (val is String) {
-                            return validateUserNamesString(val);
+                            return validateUserNamesString(userDB, val);
                           }
                           return null;
                         },
@@ -167,11 +132,11 @@ class AddGardenView extends ConsumerWidget {
                             String editorsString =
                                 _editorsFieldKey.currentState?.value ?? '';
                             List<String> editorIDs =
-                                usernamesToIDs(editorsString);
+                                usernamesToIDs(userDB, editorsString);
                             String viewersString =
                                 _viewersFieldKey.currentState?.value ?? '';
                             List<String> viewerIDs =
-                                usernamesToIDs(viewersString);
+                                usernamesToIDs(userDB, viewersString);
                             // Add the new garden.
                             gardenDB.addGarden(
                                 name: name,
