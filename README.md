@@ -4,7 +4,7 @@ The main changes in this version are:
 
 * The use of [Riverpod](https://riverpod.dev/) for state management. The data model entities are now accessed using Providers. This gets us closer to the design pattern we will use when we actually have a back-end database.
 
-* The ability to add and edit garden data using the Add Garden and Edit Garden pages. These pages implement forms using [Flutter Form Builder](https://pub.dev/packages/flutter_form_builder). 
+* The ability to add and edit garden data using the Add Garden and Edit Garden pages. These pages implement forms using [Flutter Form Builder](https://pub.dev/packages/flutter_form_builder). The example code shows how you can modularize form fields and buttons into reusable widgets. 
 
 * The ability to login as any defined user by entering their email. The password field is not checked, you can leave it blank. The signin page updates the currentUserID Riverpod provider with the email of the defined user for access by the rest of the app. If you enter an email that is not associated with a defined user (see the user_db.dart file), the UI will let you know and not let you proceed to the Home Page.
 
