@@ -2,6 +2,9 @@ import '../../../data_model/user_db.dart';
 
 /// Return null if the username string is valid, otherwise return an error message.
 validateUserNamesString(UserDB userDB, String val) {
+  if (val.isEmpty) {
+    return null;
+  }
   List<String> userNames = val.split(',').map((val) => val.trim()).toList();
   if (!userDB.areUserNames(userNames)) {
     return 'Non-existent user name(s)';

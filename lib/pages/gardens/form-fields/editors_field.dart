@@ -25,6 +25,7 @@ class EditorsField extends StatelessWidget {
       child: FormBuilderTextField(
         name: fieldName,
         key: fieldKey,
+        initialValue: currEditors,
         decoration: InputDecoration(
           labelText: fieldName,
           hintText: 'An optional, comma separated list of usernames.',

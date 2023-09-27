@@ -11,9 +11,9 @@ class ViewersField extends StatelessWidget {
       {super.key,
       required this.fieldKey,
       required this.userDB,
-      this.currEditors});
+      this.currViewers});
 
-  final String? currEditors;
+  final String? currViewers;
   final UserDB userDB;
   final GlobalKey<FormBuilderFieldState<FormBuilderField<dynamic>, dynamic>>
       fieldKey;
@@ -25,6 +25,7 @@ class ViewersField extends StatelessWidget {
       child: FormBuilderTextField(
         name: fieldName,
         key: fieldKey,
+        initialValue: currViewers,
         decoration: InputDecoration(
           labelText: fieldName,
           hintText: 'An optional, comma separated list of usernames.',

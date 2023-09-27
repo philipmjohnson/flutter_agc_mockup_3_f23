@@ -23,6 +23,7 @@ class ChapterDropdownField extends StatelessWidget {
     return FieldPadding(
       child: FormBuilderDropdown<String>(
         name: fieldName,
+        initialValue: currChapter,
         key: fieldKey,
         decoration: InputDecoration(
           labelText: fieldName,
