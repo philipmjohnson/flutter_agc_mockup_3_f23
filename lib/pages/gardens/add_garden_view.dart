@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_agc_mockup/pages/gardens/form-fields/editors_field.dart';
 import 'package:flutter_agc_mockup/pages/gardens/form-fields/photo_field.dart';
+import 'package:flutter_agc_mockup/pages/gardens/form-fields/reset_button.dart';
+import 'package:flutter_agc_mockup/pages/gardens/form-fields/submit_button.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +17,7 @@ import 'form-fields/utils.dart';
 import 'form-fields/viewers_field.dart';
 import 'gardens_view.dart';
 
-/// Provides a page enabling the creation of a new Garden.
+/// Create a new Garden.
 class AddGardenView extends ConsumerWidget {
   AddGardenView({Key? key}) : super(key: key);
 
@@ -36,7 +38,7 @@ class AddGardenView extends ConsumerWidget {
     final String currentUserID = ref.watch(currentUserIDProvider);
     List<String> chapterNames = chapterDB.getChapterNames();
 
-    void onSubmitPressed() {
+    void onSubmit() {
       bool isValid = _formKey.currentState?.saveAndValidate() ?? false;
       if (!isValid) return;
       // Since validation passed, we can safely access the values.
@@ -62,6 +64,10 @@ class AddGardenView extends ConsumerWidget {
       Navigator.pushReplacementNamed(context, GardensView.routeName);
     }
 
+    void onReset() {
+      _formKey.currentState?.reset();
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Add Garden'),
@@ -69,9 +75,9 @@ class AddGardenView extends ConsumerWidget {
         ),
         body: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          children: <Widget>[
+          children: [
             Column(
-              children: <Widget>[
+              children: [
                 FormBuilder(
                   key: _formKey,
                   child: Column(
@@ -88,30 +94,9 @@ class AddGardenView extends ConsumerWidget {
                   ),
                 ),
                 Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: onSubmitPressed,
-                        child: const Text(
-                          'Submit',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          _formKey.currentState?.reset();
-                        },
-                        // color: Theme.of(context).colorScheme.secondary,
-                        child: Text(
-                          'Reset',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
-                        ),
-                      ),
-                    ),
+                  children: [
+                    SubmitButton(onSubmit: onSubmit),
+                    ResetButton(onReset: onReset),
                   ],
                 ),
               ],

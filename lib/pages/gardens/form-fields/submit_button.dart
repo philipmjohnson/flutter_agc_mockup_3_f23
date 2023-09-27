@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'field_padding.dart';
+
 class SubmitButton extends StatelessWidget {
   const SubmitButton({super.key, required this.onSubmit});
 
@@ -7,11 +9,15 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onSubmit,
-      child: const Text(
-        'Submit',
-        style: TextStyle(color: Colors.white),
+    return Expanded(
+      child: FieldPadding(
+        child: ElevatedButton(
+          onPressed: onSubmit,
+          child: const Text(
+            'Submit',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       ),
     );
   }
