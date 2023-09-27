@@ -47,16 +47,16 @@ http://127.0.0.1:9102?uri=http://127.0.0.1:49989/eg6HXMzOw3I=/
 
 ## Screenshots
 
-Here are screen shots that illustrate this mockup. We use the flutter_markdown package to provide information on what should appear in a page when we haven't gotten around to actually mocking up the contents.
+Here are screen shots that illustrate the changes in this version of the mockup.
 
 Click on any screen shot to see it full-size.
 
 <p style="text-align: center">
-  <img src="./README-screenshots/screen-1.png" width="25%">
+  <img src="./README-screenshots/screen-1.png" width="20%">
 &nbsp; &nbsp; 
-  <img src="./README-screenshots/screen-2.png" width="25%">
+  <img src="./README-screenshots/screen-2.png" width="20%">
 &nbsp; &nbsp; 
-  <img src="./README-screenshots/screen-3.png" width="25%">
+  <img src="./README-screenshots/screen-3.png" width="20%">
 
-  <img src="./README-screenshots/screen-4.png" width="25%">
+  <img src="./README-screenshots/screen-4.png" width="20%">
 </p>
