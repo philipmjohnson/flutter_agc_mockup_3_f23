@@ -30,12 +30,11 @@ class SignupViewState extends State<SignupView> {
                 const SizedBox(height: 16.0),
                 Text(
                   "Sign Up",
-                  style: Theme.of(context).textTheme.headline5,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 16.0),
                 const Text(
-                  "Your name and email is shared only with members of your AGC Chapter and AGC Administrators."
-                ),
+                    "Your name and email is shared only with members of your AGC Chapter and AGC Administrators."),
               ],
             ),
             const SizedBox(height: 20.0),

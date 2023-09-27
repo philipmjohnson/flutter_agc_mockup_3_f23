@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+
 import '../../components/help_button.dart';
 import '../../data_model/chapter_db.dart';
 import '../../data_model/garden_db.dart';
@@ -31,10 +32,19 @@ class EditGardenView extends ConsumerWidget {
     GardenData gardenData = gardenDB.getGarden(gardenID);
     List<String> chapterNames = chapterDB.getChapterNames();
     String currChapterName = chapterDB.getChapter(gardenData.chapterID).name;
-    String currEditors = gardenData.editorIDs.map((userID) => userDB.getUser(userID).username).toList().join(', ');
-    String currViewers = gardenData.viewerIDs.map((userID) => userDB.getUser(userID).username).toList().join(', ');
+    String currEditors = gardenData.editorIDs
+        .map((userID) => userDB.getUser(userID).username)
+        .toList()
+        .join(', ');
+    String currViewers = gardenData.viewerIDs
+        .map((userID) => userDB.getUser(userID).username)
+        .toList()
+        .join(', ');
 
-    _validateUserNamesString(String val) {
+    validateUserNamesString(String val) {
+      if (val.isEmpty) {
+        return null;
+      }
       List<String> userNames = val.split(',').map((val) => val.trim()).toList();
       if (!userDB.areUserNames(userNames)) {
         return 'Non-existent user name(s)';
@@ -42,11 +52,12 @@ class EditGardenView extends ConsumerWidget {
       return null;
     }
 
-    List<String> _usernamesToIDs(String usernamesString) {
+    List<String> usernamesToIDs(String usernamesString) {
       if (usernamesString.isEmpty) {
         return [];
       }
-      List<String> usernames = usernamesString.split(',').map((editor) => editor.trim()).toList();
+      List<String> usernames =
+          usernamesString.split(',').map((editor) => editor.trim()).toList();
       return usernames.map((username) => userDB.getUserID(username)).toList();
     }
 
@@ -118,18 +129,18 @@ class EditGardenView extends ConsumerWidget {
                         initialValue: gardenData.imagePath,
                       ),
                       FormBuilderTextField(
-                          name: 'editors',
-                          key: _editorsFieldKey,
-                          initialValue: currEditors,
-                          decoration: const InputDecoration(
-                            labelText: 'Editor(s)',
-                          ),
-                          validator: (val) {
-                            if (val is String) {
-                              return _validateUserNamesString(val);
-                            }
-                            return null;
-                          },
+                        name: 'editors',
+                        key: _editorsFieldKey,
+                        initialValue: currEditors,
+                        decoration: const InputDecoration(
+                          labelText: 'Editor(s)',
+                        ),
+                        validator: (val) {
+                          if (val is String) {
+                            return validateUserNamesString(val);
+                          }
+                          return null;
+                        },
                       ),
                       FormBuilderTextField(
                         name: 'viewers',
@@ -140,7 +151,7 @@ class EditGardenView extends ConsumerWidget {
                         ),
                         validator: (val) {
                           if (val is String) {
-                            return _validateUserNamesString(val);
+                            return validateUserNamesString(val);
                           }
                           return null;
                         },
@@ -159,17 +170,33 @@ class EditGardenView extends ConsumerWidget {
                           if (isValid) {
                             // Extract garden data from fields
                             String name = _nameFieldKey.currentState?.value;
-                            String description = _descriptionFieldKey.currentState?.value;
-                            String chapterID = chapterDB.getChapterIDFromName(_chapterFieldKey.currentState?.value);
-                            String imagePath =  _photoFieldKey.currentState?.value;
-                            String editorsString = _editorsFieldKey.currentState?.value ?? '';
-                            List<String> editorIDs = _usernamesToIDs(editorsString);
-                            String viewersString = _viewersFieldKey.currentState?.value ?? '';
-                            List<String> viewerIDs = _usernamesToIDs(viewersString);
+                            String description =
+                                _descriptionFieldKey.currentState?.value;
+                            String chapterID = chapterDB.getChapterIDFromName(
+                                _chapterFieldKey.currentState?.value);
+                            String imagePath =
+                                _photoFieldKey.currentState?.value;
+                            String editorsString =
+                                _editorsFieldKey.currentState?.value ?? '';
+                            List<String> editorIDs =
+                                usernamesToIDs(editorsString);
+                            String viewersString =
+                                _viewersFieldKey.currentState?.value ?? '';
+                            List<String> viewerIDs =
+                                usernamesToIDs(viewersString);
                             // Add the new garden.
-                            gardenDB.updateGarden(id: gardenID, name: name, description: description, chapterID: chapterID, imagePath: imagePath, editorIDs: editorIDs, ownerID: currentUserID, viewerIDs: viewerIDs);
+                            gardenDB.updateGarden(
+                                id: gardenID,
+                                name: name,
+                                description: description,
+                                chapterID: chapterID,
+                                imagePath: imagePath,
+                                editorIDs: editorIDs,
+                                ownerID: currentUserID,
+                                viewerIDs: viewerIDs);
                             // Return to the list gardens page
-                            Navigator.pushReplacementNamed(context, GardensView.routeName);
+                            Navigator.pushReplacementNamed(
+                                context, GardensView.routeName);
                           }
                         },
                         child: const Text(

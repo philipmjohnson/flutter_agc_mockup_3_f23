@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+
 import '../../components/help_button.dart';
 import '../../data_model/chapter_db.dart';
 import '../../data_model/garden_db.dart';
@@ -29,7 +30,7 @@ class AddGardenView extends ConsumerWidget {
     final String currentUserID = ref.watch(currentUserIDProvider);
     List<String> chapterNames = chapterDB.getChapterNames();
 
-    _validateUserNamesString(String val) {
+    validateUserNamesString(String val) {
       List<String> userNames = val.split(',').map((val) => val.trim()).toList();
       if (!userDB.areUserNames(userNames)) {
         return 'Non-existent user name(s)';
@@ -37,11 +38,12 @@ class AddGardenView extends ConsumerWidget {
       return null;
     }
 
-    List<String> _usernamesToIDs(String usernamesString) {
+    List<String> usernamesToIDs(String usernamesString) {
       if (usernamesString.isEmpty) {
         return [];
       }
-      List<String> usernames = usernamesString.split(',').map((editor) => editor.trim()).toList();
+      List<String> usernames =
+          usernamesString.split(',').map((editor) => editor.trim()).toList();
       return usernames.map((username) => userDB.getUserID(username)).toList();
     }
 
@@ -113,19 +115,19 @@ class AddGardenView extends ConsumerWidget {
                         ]),
                       ),
                       FormBuilderTextField(
-                          name: 'editors',
-                          key: _editorsFieldKey,
-                          decoration: const InputDecoration(
-                            labelText: 'Editor(s)',
-                            hintText:
-                                'An optional, comma separated list of usernames.',
-                          ),
-                          validator: (val) {
-                            if (val is String) {
-                              return _validateUserNamesString(val);
-                            }
-                            return null;
-                          },
+                        name: 'editors',
+                        key: _editorsFieldKey,
+                        decoration: const InputDecoration(
+                          labelText: 'Editor(s)',
+                          hintText:
+                              'An optional, comma separated list of usernames.',
+                        ),
+                        validator: (val) {
+                          if (val is String) {
+                            return validateUserNamesString(val);
+                          }
+                          return null;
+                        },
                       ),
                       FormBuilderTextField(
                         name: 'viewers',
@@ -137,7 +139,7 @@ class AddGardenView extends ConsumerWidget {
                         ),
                         validator: (val) {
                           if (val is String) {
-                            return _validateUserNamesString(val);
+                            return validateUserNamesString(val);
                           }
                           return null;
                         },
@@ -156,17 +158,32 @@ class AddGardenView extends ConsumerWidget {
                           if (isValid) {
                             // Extract garden data from fields
                             String name = _nameFieldKey.currentState?.value;
-                            String description = _descriptionFieldKey.currentState?.value;
-                            String chapterID = chapterDB.getChapterIDFromName(_chapterFieldKey.currentState?.value);
-                            String imageFileName =  _photoFieldKey.currentState?.value;
-                            String editorsString = _editorsFieldKey.currentState?.value ?? '';
-                            List<String> editorIDs = _usernamesToIDs(editorsString);
-                            String viewersString = _viewersFieldKey.currentState?.value ?? '';
-                            List<String> viewerIDs = _usernamesToIDs(viewersString);
+                            String description =
+                                _descriptionFieldKey.currentState?.value;
+                            String chapterID = chapterDB.getChapterIDFromName(
+                                _chapterFieldKey.currentState?.value);
+                            String imageFileName =
+                                _photoFieldKey.currentState?.value;
+                            String editorsString =
+                                _editorsFieldKey.currentState?.value ?? '';
+                            List<String> editorIDs =
+                                usernamesToIDs(editorsString);
+                            String viewersString =
+                                _viewersFieldKey.currentState?.value ?? '';
+                            List<String> viewerIDs =
+                                usernamesToIDs(viewersString);
                             // Add the new garden.
-                            gardenDB.addGarden(name: name, description: description, chapterID: chapterID, imageFileName: imageFileName, editorIDs: editorIDs, ownerID: currentUserID, viewerIDs: viewerIDs);
+                            gardenDB.addGarden(
+                                name: name,
+                                description: description,
+                                chapterID: chapterID,
+                                imageFileName: imageFileName,
+                                editorIDs: editorIDs,
+                                ownerID: currentUserID,
+                                viewerIDs: viewerIDs);
                             // Return to the list gardens page
-                            Navigator.pushReplacementNamed(context, GardensView.routeName);
+                            Navigator.pushReplacementNamed(
+                                context, GardensView.routeName);
                           }
                         },
                         child: const Text(

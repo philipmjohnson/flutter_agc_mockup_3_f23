@@ -21,7 +21,7 @@ import 'pages/users/users_view.dart';
 
 /// Top-level widget that implements routing to the appropriate page.
 class MyApp extends StatelessWidget {
-  MyApp({super.key, required this.settingsController});
+  const MyApp({super.key, required this.settingsController});
 
   final SettingsController settingsController;
 
